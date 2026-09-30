@@ -1,0 +1,976 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../1-deploy-operator/">
+      
+      
+        <link rel="next" href="../3-restart-services/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.42">
+    
+    
+      
+        <title>2. Deploy the DynaKube - Dynatrace Enablement Lab: Kubernetes 101</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.0253249f.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+  
+      
+    
+  
+  <script type="text/javascript"
+    src="https://js-cdn.dynatrace.com/jstag/1612cf70810/bf81393wlb/f20e348d38e305a8_complete.js"
+    crossorigin="anonymous"></script>
+  
+
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#section-2-deploy-the-dynakube" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Dynatrace Enablement Lab: Kubernetes 101" class="md-header__button md-logo" aria-label="Dynatrace Enablement Lab: Kubernetes 101" data-md-component="logo">
+      
+  <img src="https://cdn.bfldr.com/B686QPH3/at/w5hnjzb32k5wcrcxnwcx4ckg/Dynatrace_signet_RGB_HTML.svg?auto=webp&format=pngg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Dynatrace Enablement Lab: Kubernetes 101
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              2. Deploy the DynaKube
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/dynatrace-wwse/enablement-kubernetes-101" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    View Code on GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Dynatrace Enablement Lab: Kubernetes 101" class="md-nav__button md-logo" aria-label="Dynatrace Enablement Lab: Kubernetes 101" data-md-component="logo">
+      
+  <img src="https://cdn.bfldr.com/B686QPH3/at/w5hnjzb32k5wcrcxnwcx4ckg/Dynatrace_signet_RGB_HTML.svg?auto=webp&format=pngg" alt="logo">
+
+    </a>
+    Dynatrace Enablement Lab: Kubernetes 101
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/dynatrace-wwse/enablement-kubernetes-101" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    View Code on GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Welcome
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../prerequisites/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Prerequisites
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1-deploy-operator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    1. Deploy the Operator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    2. Deploy the DynaKube
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    2. Deploy the DynaKube
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      How it works
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How it works">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-you-deploy-the-dynakube-with-application-observability-in-this-scenario" class="md-nav__link">
+    <span class="md-ellipsis">
+      When you deploy the DynaKube with Application Observability in this scenario
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-open-the-dynatrace-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 1 — Open the Dynatrace UI
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-apply-the-generated-manifests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 2 — Apply the generated manifests
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-wait-for-activegate-and-pods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 3 — Wait for ActiveGate and pods
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-dynakube-object-exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation — DynaKube object exists
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-activegate-is-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation — ActiveGate is Running
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#your-cluster-is-already-capturing-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Your cluster is already capturing logs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Your cluster is already capturing logs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#validation-the-log-module-is-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation — the log module is running
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation-logs-are-arriving-in-grail" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation — logs are arriving in Grail
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#explore-your-cluster-in-dynatrace" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explore your cluster in Dynatrace
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3-restart-services/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    3. Restart Application Services
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../resources/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Resources
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      How it works
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How it works">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-you-deploy-the-dynakube-with-application-observability-in-this-scenario" class="md-nav__link">
+    <span class="md-ellipsis">
+      When you deploy the DynaKube with Application Observability in this scenario
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-open-the-dynatrace-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 1 — Open the Dynatrace UI
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-apply-the-generated-manifests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 2 — Apply the generated manifests
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-wait-for-activegate-and-pods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step 3 — Wait for ActiveGate and pods
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-dynakube-object-exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation — DynaKube object exists
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation-activegate-is-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation — ActiveGate is Running
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#your-cluster-is-already-capturing-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Your cluster is already capturing logs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Your cluster is already capturing logs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#validation-the-log-module-is-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation — the log module is running
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validation-logs-are-arriving-in-grail" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation — logs are arriving in Grail
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#explore-your-cluster-in-dynatrace" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explore your cluster in Dynatrace
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<!-- The step below reads the environment variables and parses them to generate the API for the tenant,
+ this way the dynakube is generated (default is the AppOnly one with Log ingest. Those are functions of the framework. -->
+
+<!-- STEP_SETUP
+commands:
+  - dynatraceEvalReadSaveCredentials && generateDynakube
+-->
+
+<h1 id="section-2-deploy-the-dynakube">Section 2 — Deploy the DynaKube<a class="headerlink" href="#section-2-deploy-the-dynakube" title="Permanent link">#</a></h1>
+<p>The <strong>DynaKube</strong> is a Kubernetes Custom Resource that tells the Dynatrace Operator <em>how</em> to instrument your cluster — which tenant to connect to, which components to deploy, and how to configure them. Without a DynaKube, the operator is installed but idle.</p>
+<h2 id="how-it-works">How it works<a class="headerlink" href="#how-it-works" title="Permanent link">#</a></h2>
+<p>The <a href="https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/reference/dynakube-parameters"><strong>DynaKube</strong></a> custom resource is the single source of truth for how Dynatrace monitors your cluster. It tells the operator which <a href="https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/guides/operation/configuration">monitoring mode</a> to use, which tenant to connect to, and which optional components to enable.</p>
+<h3 id="when-you-deploy-the-dynakube-with-application-observability-in-this-scenario">When you deploy the DynaKube with Application Observability in this scenario<a class="headerlink" href="#when-you-deploy-the-dynakube-with-application-observability-in-this-scenario" title="Permanent link">#</a></h3>
+<ul>
+<li><strong><a href="https://docs.dynatrace.com/docs/ingest-from/dynatrace-activegate">ActiveGate</a></strong> — routes observability data from your cluster to the Dynatrace tenant, acting as a secure proxy.</li>
+<li><strong><a href="https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/guides/operation/configuration/application-only">Code Modules</a></strong> — injected into your application pods via the CSI driver to enable deep code-level monitoring and observability.</li>
+<li><strong><a href="https://docs.dynatrace.com/docs/ingest-from/opentelemetry/collector/configuration">OpenTelemetry Collector</a></strong> — deployed to collect and forward OpenTelemetry signals (traces, metrics, logs) to Dynatrace.</li>
+<li><strong><a href="https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/deployment/k8s-log-monitoring">Log Monitoring Module</a></strong> — deployed to capture and ingest container and application logs.</li>
+</ul>
+<p><img alt="Application monitoring diagram" src="../img/application_monitoring_diag.png" /></p>
+<h2 id="step-1-open-the-dynatrace-ui">Step 1 — Open the Dynatrace UI<a class="headerlink" href="#step-1-open-the-dynatrace-ui" title="Permanent link">#</a></h2>
+<p>Normally you would navigate to:</p>
+<p><strong>Infrastructure → Kubernetes → Connect cluster</strong></p>
+<p>Click <strong>Connect cluster</strong> and follow the wizard. Dynatrace will generate two manifests:</p>
+<ol>
+<li>A <code>Secret</code> containing your tenant URL, operator token, and ingest token</li>
+<li>A <code>DynaKube</code> CR with the recommended configuration for your cluster</li>
+</ol>
+<p>But since this is a managed environment, we have everything prepared for you. Just deploy the generated dynakube.yaml file in your cluster.</p>
+<h2 id="step-2-apply-the-generated-manifests">Step 2 — Apply the generated manifests<a class="headerlink" href="#step-2-apply-the-generated-manifests" title="Permanent link">#</a></h2>
+<p>Copy the <code>kubectl apply</code> command and run it in the Terminal:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>/workspaces/enablement-kubernetes-101/.devcontainer/yaml/gen/dynakube.yaml<span class="w"> </span>
+</span></code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tenant credentials are pre-loaded</p>
+<p>Your environment already has <code>DT_ENVIRONMENT</code>, <code>DT_OPERATOR_TOKEN</code>, and <code>DT_INGEST_TOKEN</code> set. The Dynatrace wizard will detect your tenant from these variables if you are signed in.</p>
+</div>
+<h2 id="step-3-wait-for-activegate-and-pods">Step 3 — Wait for ActiveGate and pods<a class="headerlink" href="#step-3-wait-for-activegate-and-pods" title="Permanent link">#</a></h2>
+<p>After applying the DynaKube, the operator provisions an ActiveGate pod and the CSI driver. On a single-node cluster, the ActiveGate pod will start first, followed by the CSI components.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>kubectl<span class="w"> </span>get<span class="w"> </span>pods<span class="w"> </span>-n<span class="w"> </span>dynatrace<span class="w"> </span>--watch
+</span></code></pre></div>
+<p>Wait until all pods show <code>Running</code> before continuing.</p>
+<details class="tip">
+<summary>Watch with K9S</summary>
+<p><a href="https://k9scli.io/">K9S</a> is a terminal-based Kubernetes UI that lets you watch and manage your Kubernetes clusters with style. Launch it with <code>k9s</code>, then navigate to the <code>dynatrace</code> namespace to see the dynatrace components updating live.</p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Command / Shortcut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Launch K9S</td>
+<td><code>k9s</code></td>
+</tr>
+<tr>
+<td>List pods in a namespace</td>
+<td><code>:pods</code> → type namespace filter, e.g. <code>dynatrace</code></td>
+</tr>
+<tr>
+<td>List all namespaces</td>
+<td><code>:namespaces</code></td>
+</tr>
+<tr>
+<td>View DynaKube custom resource</td>
+<td><code>:dynakube</code> → select the resource to inspect it</td>
+</tr>
+<tr>
+<td>Describe a deployment</td>
+<td><code>:deployments</code> → select one → press <code>d</code></td>
+</tr>
+<tr>
+<td>Shell into a container</td>
+<td>Select a pod → press <code>s</code></td>
+</tr>
+<tr>
+<td>Quit</td>
+<td><code>:q</code> or <code>Ctrl+C</code></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="K9S showing DynaKube and pods" src="../img/k9s_dynatrace.png" /></p>
+</details>
+<h2 id="validation-dynakube-object-exists">Validation — DynaKube object exists<a class="headerlink" href="#validation-dynakube-object-exists" title="Permanent link">#</a></h2>
+<!-- LAB_QUESTION
+type: shell-verification
+question: "Verify the DynaKube custom resource was created"
+buttonText: "Check DynaKube"
+command: "source .devcontainer/util/source_framework.sh >/dev/null 2>&1 && checkDynakube"
+expect:
+  operator: exit-zero
+hint: "Apply the manifests from the Dynatrace UI wizard, then check again — the check looks for the DynaKube CR in the dynatrace namespace."
+explanation: "DynaKube CR is present — the operator will now provision monitoring components."
+-->
+
+<h2 id="validation-activegate-is-running">Validation — ActiveGate is Running<a class="headerlink" href="#validation-activegate-is-running" title="Permanent link">#</a></h2>
+<!-- LAB_QUESTION
+type: shell-verification
+question: "Verify the ActiveGate pod is Running in the dynatrace namespace"
+buttonText: "Check ActiveGate"
+command: "source .devcontainer/util/source_framework.sh >/dev/null 2>&1 && checkActiveGateReady"
+expect:
+  operator: exit-zero
+hint: "The ActiveGate pod may take 1–2 minutes to start after the DynaKube is applied. Watch `kubectl get pods -n dynatrace` and check again once it is Running."
+explanation: "ActiveGate is Running — your cluster is connected to the Dynatrace tenant and data will start flowing."
+-->
+
+<h2 id="your-cluster-is-already-capturing-logs">Your cluster is already capturing logs<a class="headerlink" href="#your-cluster-is-already-capturing-logs" title="Permanent link">#</a></h2>
+<p>Here is the part people expect to be harder than it is: <strong>there is nothing left for you to do.</strong></p>
+<p>The DynaKube you just applied enables the <a href="https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/deployment/k8s-log-monitoring">Log Monitoring module</a>. The operator rolls out a log monitoring DaemonSet — its pods are named after your DynaKube, ending in <code>-logmonitoring</code> — one pod per node, and that pod tails the standard output of <strong>every container on the node</strong> straight from the node's log files.</p>
+<p>That means log collection needs:</p>
+<ul>
+<li><strong>no application restart</strong> — the log module reads files the container runtime already writes;</li>
+<li><strong>no code injection</strong> — it never touches your application process;</li>
+<li><strong>no change to your application</strong> — no logging library, no sidecar, no log driver.</li>
+</ul>
+<p>This is worth pausing on, because the <em>next</em> section is different: traces <strong>do</strong> require a restart, because the agent has to be injected into the process at startup. Logs come from outside the process; traces come from inside it.</p>
+<h3 id="validation-the-log-module-is-running">Validation — the log module is running<a class="headerlink" href="#validation-the-log-module-is-running" title="Permanent link">#</a></h3>
+<!-- LAB_QUESTION
+type: shell-verification
+question: "Verify the Dynatrace log module is running on your cluster"
+buttonText: "Check log module"
+command: "source .devcontainer/util/source_framework.sh >/dev/null 2>&1 && checkLogModuleReady"
+expect:
+  operator: exit-zero
+hint: "The log module DaemonSet is rolled out by the operator a few moments after the DynaKube is applied. Watch `kubectl get pods -n dynatrace` and check again once a `logmonitoring` pod is Running."
+explanation: "The log module is Running — every container's stdout on this node is now being shipped to Dynatrace."
+-->
+
+<h3 id="validation-logs-are-arriving-in-grail">Validation — logs are arriving in Grail<a class="headerlink" href="#validation-logs-are-arriving-in-grail" title="Permanent link">#</a></h3>
+<p>The <code>todoapp</code> has been running since your environment started, and has never been restarted or instrumented — so any log line it produces is proof that the log module alone is doing the work.</p>
+<p>The <code>endsWith(k8s.cluster.name, "{{DT_SESSION_ID}}")</code> filter scopes the query to <strong>your</strong> cluster. Every session gets a unique cluster identity ending in your session id, so classmates running this training against the same tenant never pollute your results.</p>
+<p>The query below counts the log lines collected from your cluster in the last 30 minutes, grouped by namespace and log level. The result is a small table that proves something bigger than "logs arrive": <strong>every namespace on the cluster is shipping logs</strong> — the demo app, the Dynatrace components, the system namespaces — all without touching a single one of them.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>fetch logs, from:now()-30m
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>| filter endsWith(k8s.cluster.name, "{{DT_SESSION_ID}}")
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>| summarize count = count(), by: {namespace = k8s.namespace.name, level = loglevel}
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>| sort namespace asc, count desc
+</span></code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Why <code>endsWith</code> and not <code>==</code></p>
+<p>Your cluster is named after the training plus your session id, but Kubernetes caps how long that name can be — so the <em>training</em> half gets truncated while your session id stays intact at the end. <code>endsWith</code> matches the part that is guaranteed to survive.</p>
+</div>
+<!-- LAB_QUESTION
+type: dql-verification
+question: "Verify your cluster's container logs are reaching Dynatrace Grail"
+buttonText: "Check logs in Grail"
+dql: |
+  fetch logs, from:now()-15m
+  | filter endsWith(k8s.cluster.name, "{{DT_SESSION_ID}}")
+  | limit 1
+expect:
+  operator: not-empty
+hint: "The log module needs to be Running first (previous check), and logs take ~1–2 minutes to reach Grail. Wait a moment and check again."
+explanation: "Logs from your cluster are in Grail — captured with no restart, no injection and no application change."
+-->
+
+<!-- LAB_SOLUTION
+reveal: |
+  The DynaKube manifest is generated for you from your tenant credentials (the
+  `STEP_SETUP` on this step ran `dynatraceEvalReadSaveCredentials && generateDynakube`).
+  Apply it with `kubectl apply -f .devcontainer/yaml/gen/dynakube.yaml`. The framework
+  helper `deployApplicationMonitoring` generates and applies the AppOnly + log-ingest
+  DynaKube in one step — the "Run solution" button runs it and confirms the DynaKube CR exists.
+commands:
+  - deployApplicationMonitoring
+  - fixSprintCodeModulesImage
+verify:
+  - kubectl get dynakube -n dynatrace --no-headers 2>/dev/null | grep -q .
+-->
+
+<h2 id="explore-your-cluster-in-dynatrace">Explore your cluster in Dynatrace<a class="headerlink" href="#explore-your-cluster-in-dynatrace" title="Permanent link">#</a></h2>
+<p>Once the ActiveGate is running, your cluster is visible in the Dynatrace Kubernetes app. Open it to see live cluster topology, node health, and workload status.</p>
+<p><a href="placeholder">dt-app|dynatrace.kubernetes|Open Kubernetes App</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../1-deploy-operator/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 1. Deploy the Operator">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                1. Deploy the Operator
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../3-restart-services/" class="md-footer__link md-footer__link--next" aria-label="Next: 3. Restart Application Services">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                3. Restart Application Services
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.code.annotate", "content.tabs.link", "navigation.instant", "navigation.tracking", "navigation.top", "navigation.sections", "navigation.footer", "toc.follow", "search.highlight", "search.suggest", "search.share"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+  
+      <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+        <script src="../javascripts/mermaid.min.js"></script>
+      
+    
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof dynatrace !== 'undefined') {
+        dynatrace.sendBizEvent('page_load', {'page': "2. Deploy the DynaKube"});
+      }
+    });
+  </script>
+  
+
+  </body>
+</html>
