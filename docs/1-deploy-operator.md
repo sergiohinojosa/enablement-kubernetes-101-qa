@@ -1,7 +1,9 @@
 
 # Section 1 — Deploy the Dynatrace Operator
 
-The **Dynatrace Operator** is a Kubernetes operator that manages the full lifecycle of Dynatrace monitoring components inside your cluster. It watches for `DynaKube` custom resources and automatically provisions the monitoring configuration that matches your desired mode.
+The **Dynatrace Operator** is a Kubernetes operator that manages the full lifecycle of Dynatrace monitoring components inside your cluster. It watches for `DynaKube` custom resources and automatically provisions the monitoring configuration that matches your desired mode. (QA 97: this sentence was edited in the editor.)
+
+QA 97 added this Text block through the Insert palette.
 
 ## How it works
 
