@@ -7,7 +7,7 @@ QA 97 added this Text block through the Insert palette.
 
 ## How it works
 
-The [Dynatrace Operator](https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/how-it-works/components/dynatrace-operator) is the central control plane for all Dynatrace monitoring inside Kubernetes. It follows the [operator pattern](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) — a custom controller that watches for [`DynaKube`](https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/reference/dynakube-parameters) custom resources and reconciles the cluster state to match your desired monitoring configuration.
+The [Dynatrace Operator](https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/how-it-works/components/dynatrace-operator) is the central control plane for all Dynatrace monitoring inside Kubernetes. It follows the [operator pattern](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) — a custom controller that watches for [`DynaKube`](https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/reference/dynakube-parameters) custom resources and reconciles the cluster state to match your desired monitoring configuration. (QA 97: second edit after preview.)
 
 ```
 kubectl apply DynaKube CR
