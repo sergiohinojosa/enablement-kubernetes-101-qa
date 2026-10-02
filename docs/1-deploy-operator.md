@@ -1,7 +1,7 @@
 
 # Section 1 — Deploy the Dynatrace Operator
 
-The **Dynatrace Operator** is a Kubernetes operator that manages the full lifecycle of Dynatrace monitoring components inside your cluster. It watches for `DynaKube` custom resources and automatically provisions the monitoring configuration that matches your desired mode.
+The **Dynatrace Operator** is a Kubernetes operator that manages the full lifecycle of Dynatrace monitoring components inside your cluster. It watches for `DynaKube` custom resources and automatically provisions the monitoring configuration that matches your desired mode. QA150-PROSE: edited on branch in the creator.
 
 ## How it works
 
@@ -33,7 +33,7 @@ The following resources will be deployed by default in your cluster:
 ## Step 1 — Create the dynatrace namespace
 
 ```bash
-kubectl create namespace dynatrace
+kubectl create namespace dynatrace && echo "QA150-CODE: namespace step ran"
 ```
 
 ## Step 2 — Add the Dynatrace Helm repository
