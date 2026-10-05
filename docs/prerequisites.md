@@ -61,3 +61,6 @@ explanation: "TODO application pods are Running — your environment is ready."
 
 !!! success "Both checks passed?"
     Continue to **Section 1: Deploy the Operator**.
+
+
+> Edited in the training editor (QA 204).
